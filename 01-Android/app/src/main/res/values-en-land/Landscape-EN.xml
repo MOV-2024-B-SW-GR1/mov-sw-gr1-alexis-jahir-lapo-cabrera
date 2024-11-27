@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="saludo">Hello friends, we are in English Landscape.</string>
+    <color name="saludo_color">#2196F3</color>
+    <color name="color_fondo">#4CAF50</color>
 </resources>
