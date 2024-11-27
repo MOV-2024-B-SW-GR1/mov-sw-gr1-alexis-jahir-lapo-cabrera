@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="saludo">Hola amigos, estamos en Español Portrait</string>
-    <color name="saludo_color">#EB81FF</color>
+    <color name="saludo_color">#D700FF</color>
     <color name="color_fondo">#F80054</color>
 </resources>

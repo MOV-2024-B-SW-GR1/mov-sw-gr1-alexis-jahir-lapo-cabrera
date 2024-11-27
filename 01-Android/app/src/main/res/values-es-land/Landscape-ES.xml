@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="saludo">Hola amigos, estamos en Español Landscape</string>
-    <color name="saludo_color">#673AB7</color>
+    <color name="saludo_color">#4000BF</color>
     <color name="color_fondo">#B3FFB5</color>
 </resources>
