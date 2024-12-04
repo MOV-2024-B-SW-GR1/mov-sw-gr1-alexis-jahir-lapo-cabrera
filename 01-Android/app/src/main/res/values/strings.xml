@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">01-Android</string>
+    <string name="app_name" translatable="false">01-Android</string>
     <string name="saludo">Hola Amigos</string>
     <color name="saludo_color">#FFFFFFFF</color>
     <color name="color_fondo">#FFFFFFF</color>

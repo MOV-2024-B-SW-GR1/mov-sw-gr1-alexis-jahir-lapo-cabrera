@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name" translatable="false">Android-00</string>
+    <string name="saludo" translatable="false">Hola Amigos</string>
+    <color name="saludo_color">#964B00</color>
+</resources>
