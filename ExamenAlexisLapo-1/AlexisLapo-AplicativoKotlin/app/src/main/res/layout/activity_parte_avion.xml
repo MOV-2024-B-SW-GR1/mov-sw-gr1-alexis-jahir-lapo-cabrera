@@ -5,6 +5,90 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ParteAvion">
+        tools:context=".ParteAvion"
+        android:padding="16dp"
+        android:background="#FFFFFF"
+        android:backgroundTint="@color/background">
+
+    <Spinner
+            android:id="@+id/spinnerAviones"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:background="@drawable/spinner_background"
+            android:popupBackground="@color/white"
+            android:textColor="@color/text_primary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp" />
+
+    <EditText
+            android:id="@+id/etNombreParte"
+            style="@style/CustomEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Nombre de la Parte"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerAviones"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/text_secondary"
+            android:textColorHighlight="@color/text_secondary"
+            android:textColorHint="@color/text_secondary" />
+
+    <EditText
+            android:id="@+id/etPrecioRepuesto"
+            style="@style/CustomEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Precio de Repuesto"
+            android:inputType="numberDecimal"
+            app:layout_constraintTop_toBottomOf="@+id/etNombreParte"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/text_secondary"
+            android:textColorHighlight="@color/text_secondary"
+            android:textColorHint="@color/text_secondary" />
+
+    <EditText
+            android:id="@+id/etHorasUso"
+            style="@style/CustomEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Horas de Uso"
+            android:inputType="number"
+            app:layout_constraintTop_toBottomOf="@+id/etPrecioRepuesto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/text_secondary"
+            android:textColorHighlight="@color/text_secondary"
+            android:textColorHint="@color/text_secondary" />
+
+    <Button
+            android:id="@+id/btnSave"
+            app:backgroundTint="@null"
+            style="@style/CustomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guardar"
+            android:backgroundTint="@color/button_enabled"
+            app:layout_constraintTop_toBottomOf="@+id/etHorasUso"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="48dp"
+            android:layout_marginStart="144dp" />
+
+    <Button
+            android:id="@+id/btnDelete"
+            style="@style/CustomButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Eliminar"
+            android:backgroundTint="@color/accent"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/btnSave"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
