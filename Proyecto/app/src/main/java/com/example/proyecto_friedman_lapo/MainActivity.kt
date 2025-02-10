@@ -1,6 +1,7 @@
 package com.example.proyecto_friedman_lapo
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -12,10 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -67,8 +71,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         adapter = ChatAdapter(messages)
-        rvChat.layoutManager = LinearLayoutManager(this)
+        rvChat.layoutManager = LinearLayoutManager(this).apply {
+            stackFromEnd = true // Hace que los mensajes nuevos aparezcan abajo
+        }
         rvChat.adapter = adapter
+        
+        // Scroll automático cuando aparece el teclado
+        rvChat.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            if (bottom < oldBottom) {
+                rvChat.postDelayed({
+                    rvChat.scrollToPosition(messages.size - 1)
+                }, 100)
+            }
+        }
     }
 
     private fun setupClickListeners() {
@@ -79,11 +94,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        
+        // Asegurarse de que el menú se infle correctamente
+        toolbar.inflateMenu(R.menu.menu_main)
+        
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_logout -> {
-                    auth.signOut()
-                    showLoginLayout()
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle("Cerrar Sesión")
+                        .setMessage("¿Estás seguro que deseas cerrar sesión?")
+                        .setPositiveButton("Sí") { _, _ ->
+                            auth.signOut()
+                            showLoginLayout()
+                        }
+                        .setNegativeButton("No", null)
+                        .show()
                     true
                 }
                 else -> false
@@ -95,14 +122,18 @@ class MainActivity : AppCompatActivity() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             showChatLayout()
+        } else {
+            showLoginLayout()
         }
     }
 
     private fun showLoginLayout() {
         loginLayout.visibility = View.VISIBLE
         chatLayout.visibility = View.GONE
-        messages.clear()
-        adapter.notifyDataSetChanged()
+        clearLoginFields()
+    }
+
+    private fun clearLoginFields() {
         etEmail.text.clear()
         etPassword.text.clear()
     }
@@ -110,6 +141,8 @@ class MainActivity : AppCompatActivity() {
     private fun showChatLayout() {
         loginLayout.visibility = View.GONE
         chatLayout.visibility = View.VISIBLE
+        messages.clear()
+        adapter.notifyDataSetChanged()
         
         // Agregar mensaje inicial del bot
         if (messages.isEmpty()) {
@@ -160,7 +193,19 @@ class MainActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     showChatLayout()
                 } else {
-                    showError("Error al iniciar sesión: ${task.exception?.message}")
+                    when (task.exception) {
+                        is FirebaseAuthInvalidUserException -> {
+                            showError("El usuario no existe. Por favor regístrate.")
+                            etEmail.error = "Usuario no registrado"
+                        }
+                        is FirebaseAuthInvalidCredentialsException -> {
+                            showError("Contraseña incorrecta")
+                            etPassword.error = "Contraseña incorrecta"
+                        }
+                        else -> {
+                            showError("Error al iniciar sesión: ${task.exception?.message}")
+                        }
+                    }
                 }
                 btnLogin.isEnabled = true
                 btnRegister.isEnabled = true
@@ -211,6 +256,7 @@ class MainActivity : AppCompatActivity() {
     private fun sendMessage() {
         val message = etMessage.text.toString().trim()
         if (message.isNotEmpty()) {
+            btnSend.isEnabled = false // Deshabilitar botón mientras se envía
             // Agregar mensaje del usuario
             val userMessage = Message("user", message)
             messages.add(userMessage)
@@ -251,10 +297,17 @@ class MainActivity : AppCompatActivity() {
                     showError("Error: ${e.message}")
                 }
             }
+            btnSend.isEnabled = true // Rehabilitar botón después de enviar
         }
     }
 
     private fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    // También necesitamos sobrescribir onCreateOptionsMenu
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
     }
 }
