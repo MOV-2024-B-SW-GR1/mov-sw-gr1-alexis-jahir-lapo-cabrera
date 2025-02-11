@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Alexis Lapo</string>
+    <string name="insert">Insertar</string>
+    <string name="edit">Editar</string>
+    <string name="delete">Eliminar</string>
+    <string name="status_not_initialized">Estado: No inicializado</string>
+    <string name="app_logo_description">Logo de la App</string>
+</resources>
